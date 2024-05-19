@@ -15,14 +15,18 @@ public class ComandoPosa implements Comando {
 	}
 	@Override
 	public void esegui(Partita partita) {
-		Attrezzo a = partita.getGiocatore().getBorsa().getAttrezzo(nomeAttrezzo);
-
-		if(partita.getStanzaCorrente().getNumeroAttrezzi()>0) {
-			partita.getStanzaCorrente().addAttrezzo(a);
+		if(nomeAttrezzo == null) {
+			io.mostraMessaggio("Non hai inserito nessun oggetto da posare!");;
+		}		
+		else if(partita.getGiocatore().getBorsa().hasAttrezzo(nomeAttrezzo)) {
+			Attrezzo attrezzoDaPosare = partita.getGiocatore().getBorsa().getAttrezzo(nomeAttrezzo);
+			partita.getStanzaCorrente().addAttrezzo(attrezzoDaPosare);
 			partita.getGiocatore().getBorsa().removeAttrezzo(nomeAttrezzo);
-		}
-		else {
-			io.mostraMessaggio("Non c'e' spazio nella stanza per poter inserire questo attrezzo!");
+			this.io.mostraMessaggio(partita.getStanzaCorrente().getDescrizione());
+			this.io.mostraMessaggio(partita.getGiocatore().getBorsa().toString());
+		} else {
+			this.io.mostraMessaggio(nomeAttrezzo + " non presente nella borsa!");;
+			this.io.mostraMessaggio(partita.getStanzaCorrente().getDescrizione());
 		}
 	}
 	@Override

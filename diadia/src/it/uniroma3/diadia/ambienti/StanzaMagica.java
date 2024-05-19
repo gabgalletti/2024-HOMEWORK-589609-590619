@@ -16,6 +16,7 @@ public class StanzaMagica extends Stanza {
 	public StanzaMagica(String nome) {
 		this(nome, SOGLIA_MAGICA_DEFAULT);
 	}
+	public boolean isMagica() {return true;}
 	
 	public Attrezzo modificaAttrezzo(Attrezzo attrezzo) {
 		

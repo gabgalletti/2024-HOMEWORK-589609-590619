@@ -16,13 +16,20 @@ public class ComandoPrendi implements Comando {
 	}
 	@Override
 	public void esegui(Partita partita) {
-		Attrezzo a = partita.getStanzaCorrente().getAttrezzo(nomeAttrezzo);
-		if(partita.getGiocatore().getBorsa().addAttrezzo(a)) {
-			partita.getStanzaCorrente().removeAttrezzo(a);
-		} 
-		else {
-			io.mostraMessaggio("Attrezzo troppo pesante per entrare nella borsa!");
+		if(nomeAttrezzo == null) {
+			this.io.mostraMessaggio("Non hai inserito nessun oggetto da prendere!");
 		}
+		else if(partita.getStanzaCorrente().hasAttrezzo(nomeAttrezzo)) {
+			Attrezzo attrezzoDaPrendere = partita.getStanzaCorrente().getAttrezzo(nomeAttrezzo);
+			partita.getGiocatore().getBorsa().addAttrezzo(attrezzoDaPrendere);
+			partita.getStanzaCorrente().removeAttrezzo(attrezzoDaPrendere);
+			this.io.mostraMessaggio(partita.getStanzaCorrente().getDescrizione());
+			this.io.mostraMessaggio(partita.getGiocatore().getBorsa().toString());
+		} else {
+			this.io.mostraMessaggio(nomeAttrezzo + " non presente in questa stanza!");;
+			this.io.mostraMessaggio(partita.getStanzaCorrente().getDescrizione());
+		}
+
 	}
 
 	@Override

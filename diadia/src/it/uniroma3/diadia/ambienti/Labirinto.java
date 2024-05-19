@@ -1,32 +1,26 @@
 package it.uniroma3.diadia.ambienti;
 
 import it.uniroma3.diadia.attrezzi.Attrezzo;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Labirinto {
 	
 	private Stanza stanzaIniziale;
 	private Stanza stanzaVincente;
-
+	private Map<String, Stanza> mapStanze;
 	
 	//Costruttore vuoto di labirinto
 	public Labirinto() {
 		creaStanze();
+		this.mapStanze = new HashMap<String, Stanza>();
 	}
-	
-	public Stanza getstanzaIniziale() {
-		return this.stanzaIniziale;
-	}
-	
-	
-	/**
-     * Crea tutte le stanze e le porte di collegamento
-     */
-    private void creaStanze() {
+	private void creaStanze() {
 
 		/* crea gli attrezzi */
-    	Attrezzo lanterna = new Attrezzo("lanterna",3);
+		Attrezzo lanterna = new Attrezzo("lanterna",3);
 		Attrezzo osso = new Attrezzo("osso",1);
-    	
+
 		/* crea stanze del labirinto */
 		Stanza atrio = new Stanza("Atrio");
 		Stanza aulaN11 = new Stanza("Aula N11");
@@ -54,10 +48,22 @@ public class Labirinto {
 
 		// il gioco comincia nell'atrio
         this.stanzaIniziale = atrio;  
-		this.stanzaVincente = biblioteca;	//si vince se si arriva in biblioteca
+		this.stanzaVincente = biblioteca;
     }
+	public Stanza getstanzaIniziale() {
+		return this.stanzaIniziale;
+	}
+	public void setStanzaIniziale(Stanza inizio) {
+		this.stanzaIniziale = inizio;
+	}
+	public void setStanzaVincente(Stanza fine) {
+		this.stanzaVincente = fine;
+	}
 
 	public Stanza getStanzaVincente() {
 		return stanzaVincente;
+	}
+	public Map<String, Stanza> getMappaStanze(){
+		return this.mapStanze;
 	}
 }
