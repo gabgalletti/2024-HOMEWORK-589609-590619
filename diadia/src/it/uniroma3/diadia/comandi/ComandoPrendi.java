@@ -1,48 +1,44 @@
 package it.uniroma3.diadia.comandi;
+import java.util.Scanner;
 
 import it.uniroma3.diadia.IOConsole.*;
-import it.uniroma3.diadia.IO;
-import it.uniroma3.diadia.Partita;
-import it.uniroma3.diadia.attrezzi.Attrezzo;
+import it.uniroma3.diadia.*;
+import it.uniroma3.diadia.attrezzi.*;
 
-public class ComandoPrendi implements Comando {
+@SuppressWarnings("unused")
 
-	private IO io;
-	private String nomeAttrezzo;
-	private final static String NOME = "prendi";
+public class ComandoPrendi extends AbstractComando {
+    private String nomeAttrezzo;
+    private final static String NOME = "prendi";
+    Scanner scanner = new Scanner(System.in);
+    IOConsole io = new IOConsole(scanner);
 
-	public ComandoPrendi(IO io) {
-		this.io = io;
-	}
+    @Override
+    public void esegui(Partita partita) {
+        Attrezzo a = partita.getLabirinto().getStanzaCorrente().getAttrezzo(nomeAttrezzo);
+        int pesoBorsa = partita.getGiocatore().getBorsa().getPeso();
+        int pesoBorsaMax = partita.getGiocatore().getBorsa().getPesoMax();
+        if (a != null) {
+            if (pesoBorsa + a.getPeso() <= pesoBorsaMax) {
+                partita.getGiocatore().getBorsa().addAttrezzo(a);
+                partita.getLabirinto().getStanzaCorrente().removeAttrezzo(a);
+                io.mostraMessaggio("Attrezzo preso!");
+            } else {
+                io.mostraMessaggio("Borsa piena! Non puoi prendere questo attrezzo.");
+            }
+        } else {
+            io.mostraMessaggio("Attrezzo non esistente!");
+        }
+    }
+
+    @Override
+    public void setParametro(String parametro) {
+        this.nomeAttrezzo = parametro;
+    }
+
 	@Override
-	public void esegui(Partita partita) {
-		if(nomeAttrezzo == null) {
-			this.io.mostraMessaggio("Non hai inserito nessun oggetto da prendere!");
-		}
-		else if(partita.getStanzaCorrente().hasAttrezzo(nomeAttrezzo)) {
-			Attrezzo attrezzoDaPrendere = partita.getStanzaCorrente().getAttrezzo(nomeAttrezzo);
-			partita.getGiocatore().getBorsa().addAttrezzo(attrezzoDaPrendere);
-			partita.getStanzaCorrente().removeAttrezzo(attrezzoDaPrendere);
-			this.io.mostraMessaggio(partita.getStanzaCorrente().getDescrizione());
-			this.io.mostraMessaggio(partita.getGiocatore().getBorsa().toString());
-		} else {
-			this.io.mostraMessaggio(nomeAttrezzo + " non presente in questa stanza!");;
-			this.io.mostraMessaggio(partita.getStanzaCorrente().getDescrizione());
-		}
-
+	public void leggiRiga() {
+		// TODO Auto-generated method stub
+		
 	}
-
-	@Override
-	public void setParametro(String parametro) {
-		this.nomeAttrezzo  = parametro;
-	}
-	@Override
-	public String getParametro() {
-		return this.nomeAttrezzo;
-	}
-	@Override
-	public String getNome() {
-		return NOME;
-	}
-
 }

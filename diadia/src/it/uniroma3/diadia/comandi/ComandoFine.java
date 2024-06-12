@@ -1,36 +1,26 @@
 package it.uniroma3.diadia.comandi;
+import java.util.Scanner;
 
 import it.uniroma3.diadia.IOConsole.*;
-import it.uniroma3.diadia.IO;
-import it.uniroma3.diadia.Partita;
+import it.uniroma3.diadia.*;
 
-public class ComandoFine implements Comando {
+@SuppressWarnings("unused")
 
-	private IO io;
-	private String pNull;
-	private final static String NOME = "fine";
-	public final static String MESSAGGIO_FINE = "Grazie di aver giocato!";
+public class ComandoFine extends AbstractComando {
+    String parametro = null;
+    Scanner scanner = new Scanner(System.in);
+    IOConsole io = new IOConsole(scanner);
+    private final static String NOME = "fine";
 
-	public ComandoFine(IO io) {
-		this.io = io;
-	}
-	@Override
-	public void esegui(Partita partita) {
-		partita.setFinita();
-		io.mostraMessaggio(MESSAGGIO_FINE); 
-	}
+    @Override
+    public void esegui(Partita partita) {
+        partita.setFinita();
+        io.mostraMessaggio("Grazie di aver giocato!");
+    }
 
 	@Override
-	public void setParametro(String pNull) {
-		this.pNull = pNull;
-	}
-
-	@Override
-	public String getParametro() {
-		return this.pNull;
-	}
-	@Override
-	public String getNome() {
-		return NOME;
+	public void leggiRiga() {
+		// TODO Auto-generated method stub
+		
 	}
 }

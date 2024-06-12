@@ -1,12 +1,13 @@
 package it.uniroma3.diadia.comandi;
+import java.util.Scanner;
 
 import it.uniroma3.diadia.IOConsole.*;
-import it.uniroma3.diadia.IO;
-import it.uniroma3.diadia.Partita;
-import it.uniroma3.diadia.ambienti.Stanza;
+import it.uniroma3.diadia.*;
+import it.uniroma3.diadia.ambienti.*;
 
-public class ComandoVai implements Comando {
-	
+@SuppressWarnings("unused")
+
+public class ComandoVai extends AbstractComando {
 	private IO io;
 	private String direzione;
 	
@@ -31,7 +32,7 @@ public class ComandoVai implements Comando {
 		partita.getGiocatore().setCfu(partita.getGiocatore().getCfu()-1);
 			
 	}
-
+	@Override
 	public String getParametro() {
 		return this.direzione;
 	}
@@ -40,5 +41,10 @@ public class ComandoVai implements Comando {
 	}
 	public String getNome() {
 		return "vai";
+	}
+	@Override
+	public void leggiRiga() {
+		// TODO Auto-generated method stub
+		
 	}
 }

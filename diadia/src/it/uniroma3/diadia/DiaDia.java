@@ -1,5 +1,7 @@
 package it.uniroma3.diadia;
 
+import java.io.FileNotFoundException;
+import java.util.Scanner;
 import it.uniroma3.diadia.IOConsole.*;
 import it.uniroma3.diadia.ambienti.*;
 import it.uniroma3.diadia.comandi.*;
@@ -34,11 +36,15 @@ public class DiaDia {
 	private IO io;
 	
 
-	public DiaDia(IO io) {
+	public DiaDia(IO io, String nomeFile) {
 		this.io = io;
-		this.labirinto = new Labirinto();
-		this.partita = new Partita(this.labirinto);
-		
+		try {
+			this.partita = new Partita(labirinto.getNewBuilder(nomeFile).getLabirinto());
+		} catch (FileNotFoundException e) {
+			throw new RuntimeException("Eccezione: File non trovato!");
+		} catch (FormatoFileNonValidoException e) {
+			throw new RuntimeException("Eccezione: Formato file non valido!");
+		}
 	}
 	public DiaDia(Labirinto labirinto, IO io) {
 		this.io = io;
@@ -46,7 +52,7 @@ public class DiaDia {
 		this.partita = new Partita(this.labirinto);
 	}
 
-	public void gioca() {
+	public void gioca() throws Exception{
 		String istruzione; 
 		
 		this.io.mostraMessaggio(MESSAGGIO_BENVENUTO);
@@ -74,34 +80,44 @@ public class DiaDia {
 		if(!this.partita.giocatoreIsVivo())
 			this.io.mostraMessaggio("Hai esaurito i CFU!");
 		return this.partita.isFinita();
-	}   
+	}      
 
 
-	public static void main(String[] argc) {
-		IO io = new IOConsole();
-		Labirinto labirinto = new LabirintoBuilder()
-				.addStanza("Atrio")
-				.addAttrezzo("osso", 1)
-				.addStanza("Aula N11")
-				.addStanza("Aula N10")
-				.addAttrezzo("lanterna", 3)
-				.addStanza("Laboratorio Campus")
-				.addStanza("Biblioteca")
-				.addStanzaIniziale("Atrio")
-				.addStanzaVincente("biblioteca")
-				.addAdiacenza("Atrio", "Biblioteca", "nord")
-				.addAdiacenza("Atrio", "Aula N11", "est")
-				.addAdiacenza("Atrio", "Aula N10", "sud")
-				.addAdiacenza("Atrio", "Laboratorio Campus", "ovest")
-				.addAdiacenza("Aula N11", "Laboratorio Campus", "est")
-				.addAdiacenza("Aula N11", "Atrio", "ovest")
-				.addAdiacenza("Aula N10", "Atrio", "nord")
-				.addAdiacenza("Aula N10", "Aula N11", "est")
-				.addAdiacenza("Laboratorio Campus", "Aula N11", "ovest")
-				.addAdiacenza("Laboratorio Campus", "Atrio", "est")
-				.addAdiacenza("Biblioteca", "Atrio", "sud")
-				.getLabirinto();
+	public static void main(String[] argc) throws Exception {
+		Scanner scannerDiLinee = new Scanner(System.in);
+		IO io = new IOConsole(scannerDiLinee);
+		Labirinto labirinto;
+		try {
+            LabirintoBuilder builder = new LabirintoBuilder("labirinto.txt");
+            labirinto = builder.getLabirinto();
+        } catch (FileNotFoundException | FormatoFileNonValidoException e) {
+			labirinto = new LabirintoBuilder()
+					.addStanza("Atrio")
+					.addAttrezzo("osso", 1)
+					.addStanza("Aula N11")
+					.addStanza("Aula N10")
+					.addAttrezzo("lanterna", 3)
+					.addStanza("Laboratorio Campus")
+					.addStanza("Biblioteca")
+					.addStanzaIniziale("Atrio")
+					.addStanzaVincente("biblioteca")
+					.addAdiacenza("Atrio", "Biblioteca", Direzione.NORD)
+					.addAdiacenza("Atrio", "Aula N11", Direzione.EST)
+					.addAdiacenza("Atrio", "Aula N10", Direzione.SUD)
+					.addAdiacenza("Atrio", "Laboratorio Campus", Direzione.OVEST)
+					.addAdiacenza("Aula N11", "Laboratorio Campus", Direzione.EST)
+					.addAdiacenza("Aula N11", "Atrio", Direzione.OVEST)
+					.addAdiacenza("Aula N10", "Atrio", Direzione.NORD)
+					.addAdiacenza("Aula N10", "Aula N11", Direzione.EST)
+					.addAdiacenza("Laboratorio Campus", "Aula N11", Direzione.OVEST)
+					.addAdiacenza("Laboratorio Campus", "Atrio", Direzione.EST)
+					.addAdiacenza("Biblioteca", "Atrio", Direzione.SUD)
+					.getLabirinto();
+			
+		}
 		DiaDia gioco = new DiaDia(labirinto, io);
-		gioco.gioca();
+		gioco.gioca();		//il gioco si avvia, ma se si prova a scrivere una qualsiasi direzione, non si sposta; la versione precedente funzionava
+		scannerDiLinee.close();
+		
 	}
 }

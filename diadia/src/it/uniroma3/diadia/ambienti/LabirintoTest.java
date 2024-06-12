@@ -8,7 +8,7 @@ public class LabirintoTest {
 	private Labirinto labirinto = new LabirintoBuilder()
 			.addStanzaIniziale("Atrio")
 			.addStanzaVincente("Biblioteca")
-			.addAdiacenza("Atrio", "Biblioteca", "nord")
+			.addAdiacenza("Atrio", "Biblioteca", Direzione.NORD)
 			.getLabirinto();
 	@Test
 	public void testInit_stanzaIngressoCreata() {

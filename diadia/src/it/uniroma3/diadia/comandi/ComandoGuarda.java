@@ -1,38 +1,27 @@
 package it.uniroma3.diadia.comandi;
+import java.util.Scanner;
 
 import it.uniroma3.diadia.IOConsole.*;
-import it.uniroma3.diadia.IO;
-import it.uniroma3.diadia.Partita;
+import it.uniroma3.diadia.*;
 
-public class ComandoGuarda implements Comando {
+@SuppressWarnings("unused")
 
-	private String pNull;
+public class ComandoGuarda extends AbstractComando {
+    Scanner scanner = new Scanner(System.in);
+    IOConsole io = new IOConsole(scanner);
+    String parametro = null;
+    private final static String NOME = "guarda";
 
-	IO io;
-
-	public ComandoGuarda(IO io) {
-		this.io = io;
-	}
-
-	@Override
-	public void esegui(Partita partita) {
-		this.io.mostraMessaggio(partita.getStanzaCorrente().toString());
-
-	}
+    @Override
+    public void esegui(Partita partita) {
+        io.mostraMessaggio(partita.getLabirinto().getStanzaCorrente().getDescrizione());
+		io.mostraMessaggio("Hai ancora: "+partita.getGiocatore().getCfu()+ "CFU");
+		io.mostraMessaggio(partita.getGiocatore().getBorsa().toString());
+    }
 
 	@Override
-	public void setParametro(String parametro) {
-		this.pNull = parametro;
-
-	}
-
-	@Override
-	public String getNome() {
-		return "guarda";
-	}
-
-	@Override
-	public String getParametro() {
-		return this.pNull;
+	public void leggiRiga() {
+		// TODO Auto-generated method stub
+		
 	}
 }
